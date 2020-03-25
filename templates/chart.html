@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Sentiment</title>
+    <!-- import plugin script -->
+    <script src='static/Chart.min.js'></script>
+  </head>
+  <body>
+    <h1>Universal Sentiment Search Engine</h1>
+    <h2 id="subheading"> </h2>
+    <!-- bar chart canvas element -->
+    <canvas id="Twitter" width="500" height="150"></canvas>
+    <canvas id="YahooNews" width="500" height="150"></canvas>
+    <canvas id="GoogleSearch" width="500" height="150"></canvas>
+
+    <script>
+      document.getElementById("subheading").innerHTML = "Results for: {{query}}";
+      Chart.defaults.global.responsive = false;
+      var titles = [{% for item in titles %}
+                   "{{item}}",
+                  {% endfor %}]
+      var pos = [{% for item in pos %}
+                    "{{item}}",
+                   {% endfor %}]
+      var neg = [{% for item in neg %}
+                  "{{item}}",
+                  {% endfor %}]
+      var neu = [{% for item in neu %}
+                   "{{item}}",
+                  {% endfor %}]
+
+      for (i = 0; i < titles.length; i++) {
+        var title = titles[i];
+        var chartData = {
+          labels : ["Positive", "Neutral", "Negative"],
+          datasets : [{
+              data : [pos[i], neu[i], neg[i]],
+              backgroundColor: ["#3cba9f","#e8c3b9","#c45850"]
+          }]
+        }
+        var ctx = document.getElementById(title).getContext("2d");
+        var myChart = new Chart(ctx, {
+              type: 'horizontalBar',
+              data: chartData,
+              options: {
+                  title: {
+                      display: true,
+                      text: title
+                  },
+                  legend: {
+                      display: false
+                  },
+                  scales: {
+                      xAxes: [{
+                          stacked: true
+                      }],
+                      yAxes: [{
+                          stacked: true
+                      }]
+                  }
+              }
+          });
+        }
+
+    </script>
+
+  </body>
+</html>
